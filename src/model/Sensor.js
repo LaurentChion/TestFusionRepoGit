@@ -1,17 +1,13 @@
-const TEMPERATURE = Symbol('TEMPERATURE');
-const HUMIDITY = Symbol('HUMIDITY');
-const LIGHT = Symbol('LIGHT');
-const SWITCH = Symbol('SWITCH');
-const DOOR = Symbol('DOOR');
-const FAN_SPEED = Symbol('FAN_SPEED');
+import { Data, Datum, TimeSeries } from './Data';
 
-const SensorType = [];
-SensorType[TEMPERATURE] = 'TEMPERATURE';
-SensorType[HUMIDITY] = 'HUMIDITY';
-SensorType[LIGHT] = 'LIGHT';
-SensorType[SWITCH] = 'SWITCH';
-SensorType[DOOR] = 'DOOR';
-SensorType[FAN_SPEED] = 'FAN_SPEED';
+import {
+  SensorType,
+  TEMPERATURE,
+  HUMIDITY,
+  LIGHT,
+  SWITCH,
+  DOOR,
+  FAN_SPEED } from './SensorType';
 
 export default class Sensor {
 
@@ -69,7 +65,17 @@ export default class Sensor {
     }
   }
   set data(val) {
-    this.attributes[3] = val;
+    if (typeof val !== 'undefined') {
+      if (typeof val.value !== 'undefined') {
+        this.attributes[3] = new Datum(val.value);
+      } else if (val.values && val.labels) {
+        this.attributes[3] = new TimeSeries(val.values, val.labels);
+      } else {
+        this.attributes[3] = new Data();
+      }
+    } else {
+      this.attributes[3] = new Data();
+    }
   }
   get data() {
     return this.attributes[3] || 'No Data';
