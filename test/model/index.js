@@ -13,6 +13,7 @@ for (i = 0; i < data.length; i += 1) {
   console.log(sensors[i].toString());
 }
 
+// Test sur les sensors
 describe('Sensor model tests', () => {
   // Test sur les types de sensor
   describe('Test Sensor\'s Type', () => {
@@ -43,15 +44,8 @@ describe('Sensor model tests', () => {
 
   // Test sur les data
   describe('Test Sensor\'s Data', () => {
-    // Si la data avec une valeur est bien reconnu
-    it('Data with single value', () => {
-      const truc = Array(1);
-      truc.value = 42;
-      const s = new Sensor('id', 'name', 'type', truc);
-      expect(s.data.value).toEqual(42);
-    });
     // Si la data avec la valeur 0 est bien reconnu
-    it('Data with single value 0', () => {
+    it('Data with single value 0 is ok', () => {
       expect(sensors[1].data.value).toEqual(0);
     });
     // Tester les liste et refaire les gets et set
@@ -60,24 +54,36 @@ describe('Sensor model tests', () => {
   // Test sur l'Id'
   describe('Test Sensor\'s Id', () => {
     // Id is String
-    it('Id that are string', () => {
-      const s = new Sensor('Ma super boite qui gère toute la maison v0.002alpha', 'name', 'type');
-      expect(s.id).toEqual('Ma super boite qui gère toute la maison v0.002alpha');
+    it('Ids are strings', () => {
+      for (i = 0; i < data.length; i += 1) {
+        expect(sensors[i].id).toBeA('string');
+      }
     });
     // Si l'identifiant n'est pas une chaine de caractère le convertir en chaine de caractère'
-    it('Id that are integer is convert to string', () => {
+    it('Integer id is convert to string', () => {
       const s = new Sensor(1, 'name', 'type');
-      expect(s.id).toEqual('1');
+      expect(s.id).toBeA('string');
     });
-    it('Id that are float is convert to string', () => {
+    it('Float id is convert to string', () => {
       const s = new Sensor(1.0, 'name', 'type');
-      expect(s.id).toEqual('1');
+      expect(s.id).toBeA('string');
     });
-    // Vérifier si l'id est un objet
-    // Vérifier si l'id est undefined
-    /* it('Id that are undefined is ', () => {
-      const s = new Sensor(null, 'name', 'type');
-      expect(s.id).toEqual('');
-    });*/
+
+    // Si l'id est un objet le rendre inconnue
+    it('Object id are UnknownId', () => {
+      const s = new Sensor({
+        truc: 1,
+        machin: 'blablabla',
+      });
+      expect(s.id).toEqual('UnknownId');
+    });
+
+    // Si l'id est undefined le rendre inconnue
+    it('Undefined ids are UnknownId', () => {
+      const s = new Sensor();
+      expect(s.id).toEqual('UnknownId');
+    });
+
+    // Vérifier si l'id est unique <= (stocké les objets dans une base de données ?)
   });
 });

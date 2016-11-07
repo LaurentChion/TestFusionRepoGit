@@ -22,10 +22,16 @@ export default class Sensor {
     this.data = data;
   }
   get id() {
-    return this.attributes[0] || 0;
+    return this.attributes[0] || 'UnknownId';
   }
   set id(val) {
-    this.attributes[0] = val;
+    if (typeof val === 'string') {
+      this.attributes[0] = val;
+    } else if (typeof val === 'number') {
+      this.attributes[0] = val.toString();
+    } else {
+      this.attributes[0] = 'UnknownId';
+    }
   }
   set name(val) {
     this.attributes[1] = val;
