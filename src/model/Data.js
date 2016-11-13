@@ -24,10 +24,14 @@ export class Datum extends Data {
 export class TimeSeries extends Data {
   constructor(labels, values) {
     super();
-    this.val = values;
-    this.lab = labels;
+    if (labels.length === values.length) {
+      this.val = values;
+      this.lab = labels;
+    } else {
+      throw new Error('Length of values not equals as length of labels.');
+    }
   }
-
+  // TODO TimeSeries : avoir des get et set sur un élément i
   get values() {
     return this.val;
   }

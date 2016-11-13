@@ -9,8 +9,29 @@ import {
   DOOR,
   FAN_SPEED } from './SensorType';
 
-export default class Sensor {
 
+/* TODO: Ajouter une classe actif si un objet peut être activable.
+                (exemple un intérupteur pour allumé la lumière)
+         Ajouter une classe passif si un objet n'est pas activable.
+                (exemple une sonde qui envoie une donnée)
+*/
+export default class Sensor {
+  // Déclaré un tableau static
+  static getTab() {
+    if (!this.tab) {
+      this.tab = [];
+    }
+    return this.tab;
+  }
+
+  static idIsValid(id) {
+    const tab = Sensor.getTab();
+    if (tab.includes(id)) {
+      throw Error('Id is already use');
+    } else {
+      tab.push(id);
+    }
+  }
   constructor(id, name, type, data) {
     // Initialisation du tableau contenant les attributs
     this.attributes = [4];
@@ -20,6 +41,9 @@ export default class Sensor {
     this.name = name;
     this.type = type;
     this.data = data;
+
+    // Si aucune erreur n'as était trouvé, on regarde si l'id est valable
+    Sensor.idIsValid(this.id);
   }
   get id() {
     return this.attributes[0] || 'UnknownId';
@@ -28,9 +52,11 @@ export default class Sensor {
     if (typeof val === 'string') {
       this.attributes[0] = val;
     } else if (typeof val === 'number') {
-      this.attributes[0] = val.toString();
+      const str = val.toString();
+      this.attributes[0] = str;
     } else {
       this.attributes[0] = 'UnknownId';
+      throw Error('Unknown id');
     }
   }
   set name(val) {
@@ -65,9 +91,11 @@ export default class Sensor {
           break;
         default :
           this.attributes[2] = null;
+          throw Error('Unknown type');
       }
     } else {
       this.attributes[2] = null;
+      throw Error('Unknown type');
     }
   }
   set data(val) {
@@ -78,9 +106,11 @@ export default class Sensor {
         this.attributes[3] = new TimeSeries(val.values, val.labels);
       } else {
         this.attributes[3] = new Data();
+        throw Error('Invalid data length');
       }
     } else {
       this.attributes[3] = new Data();
+      throw Error('Invalid data');
     }
   }
   get data() {
