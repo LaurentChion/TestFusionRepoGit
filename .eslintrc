@@ -1,0 +1,9 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "no-console": 0,
+    "arrow-body-style": 0,
+    "no-param-reassign": 0,
+    "no-unused-vars": ["warn", { "vars": "all", "args": "after-used" }]
+  }
+}

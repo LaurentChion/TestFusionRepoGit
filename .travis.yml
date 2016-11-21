@@ -1,0 +1,6 @@
+install:
+    - npm install
+script: npm run ci
+language: node_js
+node_js:
+  - "6"
